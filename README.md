@@ -23,20 +23,6 @@ Backend:
 Реализовать старт/стоп разговора по нажатию кнопок.
 
 
-Страница «Stock»
-
-Frontend:
-
-Использовать nextui для интерфейса таблицы и фильтров.
-Добавить фильтры (по стране и символу) и пагинацию.
-Вывести данные акций: название, символ, капитализация, цена, изменения.
-
-Backend:
-
-Подключить один из API: Alpha Vantage, Polygon.io, Finnhub, Yahoo Finance.
-Обрабатывать запросы от фронтенда и возвращать данные о выбранных акциях.
-
-
 Страница «Форма»
 
 Frontend:
@@ -46,8 +32,22 @@ Frontend:
 
 Backend:
 
-Обрабатывать данные формы на сервере с использованием fastify.
+MongoDB, обработка ошибок, валидация
 
+
+
+Страница «Stock»
+
+Frontend:
+
+Использовать nextui для интерфейса таблицы и фильтров.
+Добавить фильтры (по стране и символу) .
+Вывести данные акций: название, символ, капитализация, цена, изменения.
+
+Backend:
+
+Подключить один из API: Alpha Vantage, Polygon.io, Finnhub, Yahoo Finance.
+Обрабатывать запросы от фронтенда и возвращать данные о выбранных акциях.
 
 
 
@@ -56,3 +56,6 @@ Backend:
 
 lottiefiles
 - https://lottiefiles.com/free-animation/voice-0jDRjrK4Ua
+  
+figma  
+- https://www.figma.com/design/OLzdxBeczcwjThqOQQA9ZG/Untitled?node-id=0-1&m=dev&t=UM30sGwSQcwUlbYt-1
