@@ -1,0 +1,36 @@
+{
+  "name": "test-task-backend",
+  "version": "1.0.0",
+  "description": "test-task-backend",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "start": "node build/server.js",
+    "dev": "ts-node src/server.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@fastify/cors": "^10.0.1",
+    "@fastify/websocket": "^11.0.1",
+    "audio-decode": "^2.2.2",
+    "bcrypt": "^5.1.1",
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.4.5",
+    "fastify": "^5.1.0",
+    "fastify-plugin": "^5.0.1",
+    "fastify-websocket": "^4.3.0",
+    "mongoose": "^8.8.2",
+    "openai": "^4.72.0",
+    "ts-node": "^10.9.2",
+    "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/node": "^22.9.0",
+    "@types/ws": "^8.5.13",
+    "mongodb-memory-server": "^10.1.2",
+    "typescript": "^5.6.3"
+  }
+}
