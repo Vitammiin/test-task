@@ -1,7 +1,7 @@
 import { WebSocketServer } from 'ws';
 
 export function setupWebSocket(server) {
-    const wss = new WebSocketServer({ server }); // Подключаем WebSocket сервер к Fastify серверу
+    const wss = new WebSocketServer({ server });
 
     wss.on('connection', (ws) => {
         console.log('New WebSocket connection established');
