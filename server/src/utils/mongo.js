@@ -1,7 +1,7 @@
 import Fastify from 'fastify';
-import fastifyMongo from '@fastify/mongodb';
-import dotenv from 'dotenv';
 import fastifyCors from '@fastify/cors';
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
 
 dotenv.config();
 
@@ -13,9 +13,19 @@ server.register(fastifyCors, {
     allowedHeaders: ['Content-Type', 'Authorization'],
 });
 
-server.register(fastifyMongo, {
-    url: process.env.MONGO_URI,
-    database: process.env.DB_NAME,
-});
+const connectToDatabase = async () => {
+    try {
+        await mongoose.connect(process.env.MONGO_URI, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+        });
+        console.log('Connected to MongoDB via Mongoose');
+    } catch (error) {
+        console.error('Error connecting to MongoDB:', error);
+        process.exit(1);
+    }
+};
+
+connectToDatabase();
 
 export default server;
