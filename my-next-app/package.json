@@ -14,7 +14,10 @@
     "@nextui-org/button": "^2.0.38",
     "@nextui-org/react": "^2.4.8",
     "autoprefixer": "^10.4.20",
+<<<<<<< HEAD
     "aws-sdk": "^2.1692.0",
+=======
+>>>>>>> 6942a21e16f9939721cc71e7aa7eaea6e50d0864
     "axios": "^1.7.7",
     "framer-motion": "^11.11.17",
     "lottie-react": "^2.4.0",

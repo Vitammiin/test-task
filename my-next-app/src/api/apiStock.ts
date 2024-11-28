@@ -12,6 +12,7 @@ export const getStock = async (country: string, symbol: string) => {
     console.error("GET Stock error", error);
   }
 };
+<<<<<<< HEAD
 
 export const getAllStock = async (country: string, symbols: string[]) => {
   try {
@@ -27,3 +28,5 @@ export const getAllStock = async (country: string, symbols: string[]) => {
     console.error("GET All Stock error", error);
   }
 };
+=======
+>>>>>>> 6942a21e16f9939721cc71e7aa7eaea6e50d0864

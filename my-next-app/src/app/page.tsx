@@ -4,6 +4,10 @@ import { useEffect, useState, useRef, useCallback } from "react";
 import { useVoiceVisualizer, VoiceVisualizer } from "react-voice-visualizer";
 import { Player } from "@lottiefiles/react-lottie-player";
 import { useWebSocket } from "../hooks/useWebSocket";
+<<<<<<< HEAD
+=======
+import { getAudio } from "@/api/apiAudio";
+>>>>>>> 6942a21e16f9939721cc71e7aa7eaea6e50d0864
 
 const animationData =
   "https://lottie.host/e0a3a47e-56a1-4902-889f-e06fcc5d536e/f93zpjYihw.json";
@@ -21,7 +25,11 @@ const Audio = () => {
   const { recordedBlob, error } = recorderControls;
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
+<<<<<<< HEAD
   const { sendMessage } = useWebSocket("ws://localhost:5000");
+=======
+  const { sendMessage } = useWebSocket("ws://localhost:5000/chat");
+>>>>>>> 6942a21e16f9939721cc71e7aa7eaea6e50d0864
 
   const [hasSentAudio, setHasSentAudio] = useState(false);
 
@@ -72,6 +80,7 @@ const Audio = () => {
     if (!recordedBlob || hasSentAudio || !audioRef.current) return;
 
     const audioUrl = URL.createObjectURL(recordedBlob);
+<<<<<<< HEAD
 
     const handleEnded = () => {
       if (audioRef.current) {
@@ -104,11 +113,38 @@ const Audio = () => {
     }
   }, [error]);
 
+=======
+    if (audioRef.current) {
+      audioRef.current.src = audioUrl;
+      audioRef.current.play();
+    }
+
+    sendAudioBlob(recordedBlob);
+  }, [recordedBlob, error, sendAudioBlob, hasSentAudio]);
+
+  useEffect(() => {
+    if (!error) return;
+    console.error(error);
+  }, [error]);
+
+  useEffect(() => {
+    getAudio();
+  }, []);
+
+>>>>>>> 6942a21e16f9939721cc71e7aa7eaea6e50d0864
   return (
     <div
       className="min-h-[264px] min-w-[384px] m-auto flex flex-col justify-center items-center text-center rounded-[14px]"
       style={{
+<<<<<<< HEAD
         boxShadow: `0px 0px 1px 0px rgba(255, 255, 255, 0.15) inset, 0px 2px 10px 0px rgba(0, 0, 0, 0.2), 0px 0px 5px 0px rgba(0, 0, 0, 0.05)`,
+=======
+        boxShadow: `
+         0px 0px 1px 0px rgba(255, 255, 255, 0.15) inset,
+         0px 2px 10px 0px rgba(0, 0, 0, 0.2),
+         0px 0px 5px 0px rgba(0, 0, 0, 0.05)
+        `,
+>>>>>>> 6942a21e16f9939721cc71e7aa7eaea6e50d0864
         background: "rgba(24, 24, 27, 1)",
       }}
     >

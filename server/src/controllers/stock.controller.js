@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import axios from 'axios';
 import dotenv from 'dotenv';
 
@@ -9,6 +10,14 @@ export async function getStock(req, reply) {
     const { country, symbol } = req.query;
 
     const symbolUrl = `https://finnhub.io/api/v1/stock/symbol?exchange=${country}&token=${API_KEY}`;
+=======
+export async function getStock(req, reply) {
+    const { country, symbol } = req.query;
+    const API_KEY = process.env.API_KEY;
+
+    const symbolUrl = `https://finnhub.io/api/v1/stock/symbol?exchange=${country}&token=${API_KEY}`;
+
+>>>>>>> 6942a21e16f9939721cc71e7aa7eaea6e50d0864
     try {
         const symbolResponse = await fetch(symbolUrl);
         const symbolData = await symbolResponse.json();
@@ -33,6 +42,7 @@ export async function getStock(req, reply) {
         reply.code(500).send({ error: "Failed to fetch stock data" });
     }
 }
+<<<<<<< HEAD
 
 export async function getAllStock(req, reply) {
     const { country, symbols } = req.query;
@@ -73,3 +83,5 @@ export async function getAllStock(req, reply) {
         reply.code(500).send({ error: "Failed to fetch stock data" });
     }
 }
+=======
+>>>>>>> 6942a21e16f9939721cc71e7aa7eaea6e50d0864

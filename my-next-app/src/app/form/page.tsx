@@ -19,6 +19,7 @@ export default function Form() {
       return;
     }
 
+<<<<<<< HEAD
     const data = await postEmail(email);
 
     if (data) {
@@ -29,6 +30,14 @@ export default function Form() {
         alert(`Your email ${email} has been sent.`);
         setEmail("");
       }
+=======
+    const token = await postEmail(email);
+
+    if (token) {
+      sessionStorage.setItem("token", token);
+      alert(`Your email ${email} has been sent.`);
+      setEmail("");
+>>>>>>> 6942a21e16f9939721cc71e7aa7eaea6e50d0864
     }
   };
 
