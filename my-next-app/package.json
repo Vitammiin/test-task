@@ -1,0 +1,38 @@
+{
+  "name": "my-next-app",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@iconify/react": "^3.0.0",
+    "@lottiefiles/react-lottie-player": "^3.5.4",
+    "@nextui-org/button": "^2.0.38",
+    "@nextui-org/react": "^2.4.8",
+    "autoprefixer": "^10.4.20",
+    "aws-sdk": "^2.1692.0",
+    "axios": "^1.7.7",
+    "framer-motion": "^11.11.17",
+    "lottie-react": "^2.4.0",
+    "next": "^13.5.0",
+    "postcss": "^8.4.49",
+    "react": "^18.3.1",
+    "react-audio-visualize": "^1.2.0",
+    "react-dom": "^18.3.1",
+    "react-voice-visualizer": "^2.0.4",
+    "react-wavesurfer": "^0.8.6",
+    "tailwindcss": "^3.4.15"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "eslint": "^8.0.0",
+    "eslint-config-next": "^15.0.3",
+    "typescript": "^5.0.0"
+  }
+}
