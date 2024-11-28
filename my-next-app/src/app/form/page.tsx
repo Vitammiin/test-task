@@ -19,12 +19,16 @@ export default function Form() {
       return;
     }
 
-    const token = await postEmail(email);
+    const data = await postEmail(email);
 
-    if (token) {
-      sessionStorage.setItem("token", token);
-      alert(`Your email ${email} has been sent.`);
-      setEmail("");
+    if (data) {
+      sessionStorage.setItem("token", data.token);
+      if (data.message === "Email already exists") {
+        alert(`Your email ${email} exists.`);
+      } else {
+        alert(`Your email ${email} has been sent.`);
+        setEmail("");
+      }
     }
   };
 

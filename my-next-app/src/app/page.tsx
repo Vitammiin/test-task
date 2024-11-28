@@ -4,7 +4,6 @@ import { useEffect, useState, useRef, useCallback } from "react";
 import { useVoiceVisualizer, VoiceVisualizer } from "react-voice-visualizer";
 import { Player } from "@lottiefiles/react-lottie-player";
 import { useWebSocket } from "../hooks/useWebSocket";
-import { getAudio } from "@/api/apiAudio";
 
 const animationData =
   "https://lottie.host/e0a3a47e-56a1-4902-889f-e06fcc5d536e/f93zpjYihw.json";
@@ -22,7 +21,7 @@ const Audio = () => {
   const { recordedBlob, error } = recorderControls;
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const { sendMessage } = useWebSocket("ws://localhost:5000/chat");
+  const { sendMessage } = useWebSocket("ws://localhost:5000");
 
   const [hasSentAudio, setHasSentAudio] = useState(false);
 
@@ -73,32 +72,43 @@ const Audio = () => {
     if (!recordedBlob || hasSentAudio || !audioRef.current) return;
 
     const audioUrl = URL.createObjectURL(recordedBlob);
-    if (audioRef.current) {
-      audioRef.current.src = audioUrl;
-      audioRef.current.play();
+
+    const handleEnded = () => {
+      if (audioRef.current) {
+        audioRef.current.src = audioUrl;
+        audioRef.current.load();
+        audioRef.current.play();
+      }
+    };
+
+    const currentAudioRef = audioRef.current;
+
+    if (currentAudioRef.paused) {
+      handleEnded();
+    } else {
+      currentAudioRef.addEventListener("ended", handleEnded);
     }
 
     sendAudioBlob(recordedBlob);
+
+    return () => {
+      if (currentAudioRef) {
+        currentAudioRef.removeEventListener("ended", handleEnded);
+      }
+    };
   }, [recordedBlob, error, sendAudioBlob, hasSentAudio]);
 
   useEffect(() => {
-    if (!error) return;
-    console.error(error);
+    if (error) {
+      console.error("Ошибка записи:", error);
+    }
   }, [error]);
-
-  useEffect(() => {
-    getAudio();
-  }, []);
 
   return (
     <div
       className="min-h-[264px] min-w-[384px] m-auto flex flex-col justify-center items-center text-center rounded-[14px]"
       style={{
-        boxShadow: `
-         0px 0px 1px 0px rgba(255, 255, 255, 0.15) inset,
-         0px 2px 10px 0px rgba(0, 0, 0, 0.2),
-         0px 0px 5px 0px rgba(0, 0, 0, 0.05)
-        `,
+        boxShadow: `0px 0px 1px 0px rgba(255, 255, 255, 0.15) inset, 0px 2px 10px 0px rgba(0, 0, 0, 0.2), 0px 0px 5px 0px rgba(0, 0, 0, 0.05)`,
         background: "rgba(24, 24, 27, 1)",
       }}
     >

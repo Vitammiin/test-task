@@ -5,8 +5,9 @@ import { Input } from "@nextui-org/react";
 import Stocks from "./table/table";
 
 function Page() {
-  const [country, setCountry] = useState<string>("US");
-  const [symbol, setSymbol] = useState<string>("AAPL");
+  const [country, setCountry] = useState<string>("");
+  const [symbol, setSymbol] = useState<string>("");
+
   return (
     <div className="flex flex-col text-center justify-center">
       <Input

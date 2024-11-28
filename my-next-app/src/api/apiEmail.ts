@@ -6,7 +6,7 @@ export const postEmail = async (email: string) => {
       email: `${email}`,
     });
     if (response && response.data) {
-      return response.data.token;
+      return response.data;
     }
   } catch (error) {
     console.error("POST Email error", error);
