@@ -1,0 +1,35 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "start": "node src/index.js",
+    "dev": "npx ts-node src/server.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "-": "^0.0.1",
+    "@fastify/cors": "^10.0.1",
+    "@fastify/mongodb": "^9.0.1",
+    "@fastify/websocket": "^11.0.1",
+    "@types/bcrypt": "^5.0.2",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/ws": "^8.5.13",
+    "axios": "^1.7.8",
+    "bcrypt": "^5.1.1",
+    "fastify": "^5.1.0",
+    "fastify-websocket": "^4.2.2",
+    "mongoose": "^8.8.3",
+    "openai": "^4.73.1",
+    "ws": "^8.18.0",
+    "wscat": "^6.0.1"
+  },
+  "keywords": [],
+  "description": "",
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "typescript": "^5.7.2"
+  }
+}

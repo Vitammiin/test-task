@@ -1,0 +1,30 @@
+{
+  "name": "next-front",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@iconify/react": "^5.0.2",
+    "@lottiefiles/react-lottie-player": "^3.5.4",
+    "@nextui-org/react": "^2.4.8",
+    "axios": "^1.7.8",
+    "next": "15.0.3",
+    "react": "^18.3.1",
+    "react-audio-visualize": "^1.2.0",
+    "react-dom": "^18.3.1",
+    "react-voice-visualizer": "^2.0.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "postcss": "^8",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5"
+  }
+}
