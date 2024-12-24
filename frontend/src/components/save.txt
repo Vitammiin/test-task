@@ -1,0 +1,74 @@
+import React, { useState, useEffect } from "react";
+import { Player } from '@lottiefiles/react-lottie-player';
+import blueLottie from "../../public/lottie/BlueAnimation.json";  // Синяя анимация для кнопки "Start conversation"
+import redLottie from "../../public/lottie/RedAnimation.json";   // Красная анимация для кнопки "End conversation"
+import { useVoiceVisualizer, VoiceVisualizer } from "react-voice-visualizer";  // Импортируем хук и компонент для визуализации
+
+const MicrophoneButton = () => {
+    const [isActive, setIsActive] = useState(false);
+
+    // Используем хук из библиотеки для управления записью
+    const recorderControls = useVoiceVisualizer();
+    const { recordedBlob, error } = recorderControls;
+
+    useEffect(() => {
+        if (recordedBlob) {
+            console.log("Recorded Blob:", recordedBlob);  // Логируем записанный аудио-блоб
+        }
+    }, [recordedBlob]);
+
+    useEffect(() => {
+        if (error) {
+            console.error("Error:", error);  // Логируем ошибку, если она возникает
+        }
+    }, [error]);
+
+    // Обработчик нажатия кнопки
+    const handleClick = () => {
+        setIsActive(!isActive);
+    };
+
+    return (
+        <div style={{ textAlign: "center" }}>
+            {/* Текст над анимацией */}
+            <div style={{ marginBottom: "10px", fontSize: "18px", fontWeight: "bold" }}>
+                {isActive ? "End conversation" : "Start conversation"}
+            </div>
+
+            {/* Контейнер для кнопки и анимации */}
+            <div
+                onClick={handleClick}  // Обработчик клика по анимации
+                style={{
+                    width: "150px",  // Установим одинаковые размеры для кнопки и анимации
+                    height: "150px",
+                    cursor: "pointer", // Указываем, что это интерактивная область
+                    display: "inline-block",
+                    borderRadius: "50%",  // Круглая форма
+                }}
+            >
+                {/* Анимация с использованием Lottie */}
+                <Player
+                    loop
+                    autoplay={isActive} // Анимация будет активна только при isActive
+                    src={isActive ? redLottie : blueLottie}  // Меняется анимация в зависимости от состояния
+                    style={{
+                        width: "150%",  // Анимация займет всю площадь контейнера
+                        height: "150%",
+                        position: "relative",  // Анимация будет растягиваться по всей области контейнера
+                        top: -37,
+                        left: -37,
+                    }}
+                />
+            </div>
+
+            {/* Визуализация звука */}
+            {isActive && (
+                <div style={{ marginTop: "20px", width: "300px", height: "100px" }}>
+                    <VoiceVisualizer controls={recorderControls} width={300} height={100} mainBarColor="#4e9dff" />
+                </div>
+            )}
+        </div>
+    );
+};
+
+export default MicrophoneButton;
