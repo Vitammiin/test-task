@@ -1,0 +1,73 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  @font-face {
+    font-family: 'Inter-400';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('/assets/fonts/Inter_400-Regular.ttf') format('truetype');
+  }
+
+  @font-face {
+    font-family: 'Inter-500';
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+    src: url('/assets/fonts/Inter_500-Medium.ttf') format('truetype');
+  }
+
+  @font-face {
+    font-family: 'Inter-600';
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
+    src: url('/assets/fonts/Inter_600-SemiBold.ttf') format('truetype');
+  }
+
+  @font-face {
+    font-family: 'Inter-700';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url('/assets/fonts/Inter_700-Bold.ttf') format('truetype');
+  }
+
+  body {
+    font-family: 'Inter-600', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.25;
+    letter-spacing: 0;
+
+    color: theme('colors.mainPrimaryText');
+    background-color: theme('colors.mainBackground');
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  img {
+    object-fit: cover;
+  }
+}
+
+@layer components {
+  .input,
+  .textarea {
+    @apply block w-full px-[18px] py-[6px] text-mainPrimaryText bg-inherit border-[2px] rounded-lg border-customGrey-300 border-opacity-40 outline-none transition-all 
+    placeholder:text-customGrey-200 
+    hover:border-customBlue-200
+    focus:border-customBlue-200;
+  }
+}
+
+@layer components {
+  th,
+  td {
+    @apply px-2 py-2 font-Inter-400 font-normal text-sm text-center text-white;
+  }
+}
