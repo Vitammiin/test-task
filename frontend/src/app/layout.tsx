@@ -1,12 +1,13 @@
-import React from "react";
+import React from 'react';
 
-import type { Metadata } from "next";
+import type { Metadata } from 'next';
 
-import "./globals.css";
+// import "./globals.css";
+import '@/app/globals.css';
 
 export const metadata: Metadata = {
-  title: "Audio Recorder",
-  description: "Audio Recorder App",
+  title: 'Audio Recorder',
+  description: 'Audio Recorder App',
 };
 
 export default function RootLayout({
@@ -25,7 +26,7 @@ export default function RootLayout({
         />
       </head>
 
-      <body>{children}</body>
+      <body className="w-full h-screen">{children}</body>
     </html>
   );
 }

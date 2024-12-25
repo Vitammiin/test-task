@@ -1,11 +1,13 @@
-import React from "react";
-import "./globals.css";
+import React from 'react';
+import App from '@/nextUiForm/App';
+import AudioRecording from './components/AudioRecording';
 
 export default function Home() {
   return (
     <div>
       <main>
-        <h1>Home page</h1>
+        <App />
+        <AudioRecording />
       </main>
     </div>
   );
