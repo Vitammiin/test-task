@@ -4,6 +4,7 @@ import React from 'react';
 import { Button, Input, Link, Tooltip } from '@nextui-org/react';
 import { AnimatePresence, domAnimation, LazyMotion, m } from 'framer-motion';
 import { Icon } from '@iconify/react';
+import { registerUser } from '@/api/apiRegistration';
 
 const RegistrationForm = () => {
   const [isPasswordVisible, setIsPasswordVisible] = React.useState(false);
@@ -86,15 +87,21 @@ const RegistrationForm = () => {
     paginate(1);
   };
 
-  const handleConfirmPasswordSubmit = () => {
+  const handleConfirmPasswordSubmit = async () => {
     if (!confirmPassword.length || confirmPassword !== password) {
       setIsConfirmPasswordValid(false);
-
       return;
     }
     setIsConfirmPasswordValid(true);
-    // Submit logic or API call here
-    console.log(`Email: ${email}, Password: ${password}`);
+
+    const result = await registerUser(email, password);
+    if (result.success) {
+      console.log('Registration successful');
+      // Добавьте здесь логику для успешной регистрации
+    } else {
+      console.error('Registration failed:', result.error);
+      // Добавьте здесь обработку ошибки
+    }
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
