@@ -1,12 +1,10 @@
 'use client';
-
 import React from 'react';
 import { Button, Input, Link, Tooltip } from '@nextui-org/react';
 import { AnimatePresence, domAnimation, LazyMotion, m } from 'framer-motion';
 import { Icon } from '@iconify/react';
 import { registerUser } from '@/api/apiRegistration';
 import toast, { Toaster } from 'react-hot-toast';
-import dotenv from 'dotenv';
 
 const RegistrationForm = () => {
   const [isPasswordVisible, setIsPasswordVisible] = React.useState(false);
@@ -20,6 +18,8 @@ const RegistrationForm = () => {
   const [isPasswordValid, setIsPasswordValid] = React.useState(true);
   const [isConfirmPasswordValid, setIsConfirmPasswordValid] =
     React.useState(true);
+  const [emailError, setEmailError] = React.useState('');
+  const [passwordError, setPasswordError] = React.useState('');
 
   const togglePasswordVisibility = () =>
     setIsPasswordVisible(!isPasswordVisible);
@@ -30,7 +30,7 @@ const RegistrationForm = () => {
     (props: React.PropsWithChildren<{}>) => (
       <m.h1
         animate={{ opacity: 1, x: 0 }}
-        className="text-xl font-medium"
+        className="text-2xl font-bold text-gray-800"
         exit={{ opacity: 0, x: -10 }}
         initial={{ opacity: 0, x: -10 }}
       >
@@ -78,24 +78,45 @@ const RegistrationForm = () => {
           : 'Something went wrong',
     );
 
-  const handleEmailSubmit = () => {
+  const validateEmail = (email: string) => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!email.length) {
-      setIsEmailValid(false);
-
-      return;
+      setEmailError('Email is required');
+      return false;
     }
-    setIsEmailValid(true);
-    paginate(1);
+    if (!re.test(email)) {
+      setEmailError('Invalid email format');
+      return false;
+    }
+    setEmailError('');
+    return true;
+  };
+
+  const validatePassword = (password: string) => {
+    if (password.length < 6) {
+      setPasswordError('Password must be at least 6 characters long');
+      return false;
+    }
+    setPasswordError('');
+    return true;
+  };
+
+  const handleEmailSubmit = () => {
+    if (validateEmail(email)) {
+      setIsEmailValid(true);
+      paginate(1);
+    } else {
+      setIsEmailValid(false);
+    }
   };
 
   const handlePasswordSubmit = () => {
-    if (!password.length) {
+    if (validatePassword(password)) {
+      setIsPasswordValid(true);
+      paginate(1);
+    } else {
       setIsPasswordValid(false);
-
-      return;
     }
-    setIsPasswordValid(true);
-    paginate(1);
   };
 
   const handleConfirmPasswordSubmit = async () => {
@@ -104,14 +125,13 @@ const RegistrationForm = () => {
       return;
     }
     setIsConfirmPasswordValid(true);
-
     try {
       const result = await registerUser(email, password);
       if (result.success) {
-        console.log('Registration successful');
+        toast.success('Registration successful!');
         // Перенаправление на страницу успешной регистрации
       } else {
-        if (result.error === 409) {
+        if (Number(result.error) === 409) {
           showError(409);
         } else {
           showError(500);
@@ -141,9 +161,9 @@ const RegistrationForm = () => {
 
   return (
     <div className="flex h-full w-full items-center justify-center">
-      <div className="flex w-full max-w-sm flex-col gap-4 overflow-hidden rounded-large bg-content1 px-8 pb-10 pt-6 shadow-small">
+      <div className="flex w-93 max-w-md flex-col gap-5 overflow-hidden rounded-xl bg-white px-12 py-10 shadow-lg">
         <LazyMotion features={domAnimation}>
-          <m.div className="flex min-h-[40px] items-center gap-2 pb-2">
+          <m.div className="flex min-h-[40px] items-center gap-4 mb-1">
             <AnimatePresence initial={false} mode="popLayout">
               {page >= 1 && (
                 <m.div
@@ -156,10 +176,11 @@ const RegistrationForm = () => {
                       isIconOnly
                       size="sm"
                       variant="flat"
+                      className="bg-gray-200 hover:bg-gray-300"
                       onPress={() => paginate(-1)}
                     >
                       <Icon
-                        className="text-default-500"
+                        className="text-gray-600"
                         icon="solar:alt-arrow-left-linear"
                         width={16}
                       />
@@ -176,7 +197,7 @@ const RegistrationForm = () => {
             <m.form
               key={page}
               animate="center"
-              className="flex flex-col gap-3"
+              className="flex flex-col gap-5"
               custom={direction}
               exit="exit"
               initial="enter"
@@ -192,7 +213,15 @@ const RegistrationForm = () => {
                   label="Email Address"
                   name="email"
                   type="email"
+                  placeholder="Enter your email"
+                  className="w-full"
+                  classNames={{
+                    input:
+                      'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 mb-3 mt-3',
+                    label: 'text-sm font-medium text-gray-700',
+                  }}
                   validationState={isEmailValid ? 'valid' : 'invalid'}
+                  errorMessage={emailError}
                   value={email}
                   onValueChange={(value) => {
                     setIsEmailValid(true);
@@ -208,12 +237,12 @@ const RegistrationForm = () => {
                     <button type="button" onClick={togglePasswordVisibility}>
                       {isPasswordVisible ? (
                         <Icon
-                          className="pointer-events-none text-2xl text-default-400"
+                          className="pointer-events-none text-2xl text-gray-400"
                           icon="solar:eye-closed-linear"
                         />
                       ) : (
                         <Icon
-                          className="pointer-events-none text-2xl text-default-400"
+                          className="pointer-events-none text-2xl text-gray-400"
                           icon="solar:eye-bold"
                         />
                       )}
@@ -221,8 +250,16 @@ const RegistrationForm = () => {
                   }
                   label="Password"
                   name="password"
+                  placeholder="Enter your password"
                   type={isPasswordVisible ? 'text' : 'password'}
+                  className="w-full"
+                  classNames={{
+                    input:
+                      'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 mb-3 mt-3',
+                    label: 'text-sm font-medium text-gray-700',
+                  }}
                   validationState={isPasswordValid ? 'valid' : 'invalid'}
+                  errorMessage={passwordError}
                   value={password}
                   onValueChange={(value) => {
                     setIsPasswordValid(true);
@@ -241,12 +278,12 @@ const RegistrationForm = () => {
                     >
                       {isConfirmPasswordVisible ? (
                         <Icon
-                          className="pointer-events-none text-2xl text-default-400"
+                          className="pointer-events-none text-2xl text-gray-400"
                           icon="solar:eye-closed-linear"
                         />
                       ) : (
                         <Icon
-                          className="pointer-events-none text-2xl text-default-400"
+                          className="pointer-events-none text-2xl text-gray-400"
                           icon="solar:eye-bold"
                         />
                       )}
@@ -260,6 +297,13 @@ const RegistrationForm = () => {
                   label="Confirm Password"
                   name="confirmPassword"
                   type={isConfirmPasswordVisible ? 'text' : 'password'}
+                  placeholder="Repeat your password"
+                  className="w-full"
+                  classNames={{
+                    input:
+                      'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 mb-3 mt-3',
+                    label: 'text-sm font-medium text-gray-700',
+                  }}
                   validationState={isConfirmPasswordValid ? 'valid' : 'invalid'}
                   value={confirmPassword}
                   onValueChange={(value) => {
@@ -268,7 +312,12 @@ const RegistrationForm = () => {
                   }}
                 />
               )}
-              <Button fullWidth color="primary" type="submit">
+              <Button
+                fullWidth
+                color="primary"
+                type="submit"
+                className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300"
+              >
                 {page === 0
                   ? 'Continue with Email'
                   : page === 1
@@ -278,9 +327,9 @@ const RegistrationForm = () => {
             </m.form>
           </AnimatePresence>
         </LazyMotion>
-        <p className="text-center text-small">
+        <p className="text-center text-sm text-gray-600">
           Already have an account?&nbsp;
-          <Link href="#" size="sm">
+          <Link href="#" className="text-blue-600 hover:underline">
             Log In
           </Link>
         </p>

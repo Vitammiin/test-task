@@ -18,7 +18,7 @@ export const registerUser = async (
       password,
     });
 
-    if (response.status === 200) {
+    if (response.status === 201) {
       return { success: true, data: response.data };
     } else {
       return { success: false, error: 'Registration failed' };

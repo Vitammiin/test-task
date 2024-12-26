@@ -1,0 +1,22 @@
+// import React from 'react';
+// import Link from 'next/link';
+
+// export interface NavBarItemProps {
+//   current?: boolean;
+//   pathname: string;
+//   children: React.ReactNode;
+// }
+
+// export default function NavBarItem({
+//   current,
+//   pathname,
+//   children,
+// }: NavBarItemProps) {
+//   return (
+//     <li>
+//       <Link href={pathname} className="flex items-center h-9 mx-1 gap-3.5">
+//         <span className="font-medium text-zinc-50">{children}</span>
+//       </Link>
+//     </li>
+//   );
+// }
