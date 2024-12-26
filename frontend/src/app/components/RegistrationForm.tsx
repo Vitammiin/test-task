@@ -111,6 +111,11 @@ const RegistrationForm = () => {
   };
 
   const handlePasswordSubmit = () => {
+    // const isValid = validatePassword(password);
+    // setIsPasswordValid(isValid); // Устанавливаем валидность
+    // if (isValid) {
+    //   paginate(1);
+    // }
     if (validatePassword(password)) {
       setIsPasswordValid(true);
       paginate(1);
@@ -125,11 +130,11 @@ const RegistrationForm = () => {
       return;
     }
     setIsConfirmPasswordValid(true);
+
     try {
       const result = await registerUser(email, password);
       if (result.success) {
         toast.success('Registration successful!');
-        // Перенаправление на страницу успешной регистрации
       } else {
         if (Number(result.error) === 409) {
           showError(409);
@@ -161,7 +166,7 @@ const RegistrationForm = () => {
 
   return (
     <div className="flex h-full w-full items-center justify-center">
-      <div className="flex w-93 max-w-md flex-col gap-5 overflow-hidden rounded-xl bg-white px-12 py-10 shadow-lg">
+      <div className="flex max-w-sm flex-col gap-5 overflow-hidden rounded-xl bg-white px-12 py-10 shadow-lg">
         <LazyMotion features={domAnimation}>
           <m.div className="flex min-h-[40px] items-center gap-4 mb-1">
             <AnimatePresence initial={false} mode="popLayout">
