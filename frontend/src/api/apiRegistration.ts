@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+axios.defaults.baseURL = process.env.APP_BACKEND_URL || 'http://localhost:3001';
+
 interface RegisterUserResponse {
   success: boolean;
   data?: any;
@@ -11,7 +13,7 @@ export const registerUser = async (
   password: string,
 ): Promise<RegisterUserResponse> => {
   try {
-    const response = await axios.post('/api/register', {
+    const response = await axios.post('/register', {
       email,
       password,
     });

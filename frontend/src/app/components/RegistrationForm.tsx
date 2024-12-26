@@ -5,6 +5,7 @@ import { Button, Input, Link, Tooltip } from '@nextui-org/react';
 import { AnimatePresence, domAnimation, LazyMotion, m } from 'framer-motion';
 import { Icon } from '@iconify/react';
 import { registerUser } from '@/api/apiRegistration';
+import toast, { Toaster } from 'react-hot-toast';
 import dotenv from 'dotenv';
 
 const RegistrationForm = () => {
@@ -68,6 +69,15 @@ const RegistrationForm = () => {
     setPage([page + newDirection, newDirection]);
   };
 
+  const showError = (error: number) =>
+    toast.error(
+      error === 409
+        ? 'This email is already registered'
+        : error === 400
+          ? 'Invalid input data'
+          : 'Something went wrong',
+    );
+
   const handleEmailSubmit = () => {
     if (!email.length) {
       setIsEmailValid(false);
@@ -95,17 +105,22 @@ const RegistrationForm = () => {
     }
     setIsConfirmPasswordValid(true);
 
-    const result = await registerUser(email, password);
-    if (result.success) {
-      console.log('Registration successful');
-      // Добавьте здесь логику для успешной регистрации
-    } else {
-      console.error('Registration failed:', result.error);
-      // Добавьте здесь обработку ошибки
+    try {
+      const result = await registerUser(email, password);
+      if (result.success) {
+        console.log('Registration successful');
+        // Перенаправление на страницу успешной регистрации
+      } else {
+        if (result.error === 409) {
+          showError(409);
+        } else {
+          showError(500);
+        }
+      }
+    } catch (error) {
+      showError(500);
     }
   };
-
-  const backendUrl = process.env.APP_BACKEND_URL;
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -165,6 +180,7 @@ const RegistrationForm = () => {
               custom={direction}
               exit="exit"
               initial="enter"
+              method="post"
               transition={{ duration: 0.2 }}
               variants={variants}
               onSubmit={handleSubmit}
@@ -268,6 +284,7 @@ const RegistrationForm = () => {
             Log In
           </Link>
         </p>
+        <Toaster position="top-right" reverseOrder={false} />
       </div>
     </div>
   );

@@ -11,9 +11,10 @@ import { errorHandler } from './middlewares/errorHandler.js';
 const fastify = Fastify({ logger: true });
 
 fastify.register(fastifyCors, {
-  origin: '*',
+  origin: 'http://localhost:3000',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
 });
 
 fastify.register(fastifyWebsocket);
