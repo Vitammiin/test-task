@@ -5,14 +5,7 @@
 
 // const NavBar = () => {
 //     const [isOpen, setIsOpen] = useState(false);
-//     const [isLoading, setIsLoading] = useState(false);
 //     const router = useRouter();
-
-// //     useEffect(() => {
-// //         const handleStart = () => setIsLoading(true);
-// //         const handleComplete = () => setIsLoading(false);
-// //     )
-// // };
 
 //   const toggleMenu = () => {
 //     setIsOpen(!isOpen);
@@ -20,11 +13,6 @@
 
 //   return (
 //     <nav className="bg-gradient-to-r from-purple-600 to-indigo-600 shadow-lg">
-//       {isLoading && (
-//         <div className="fixed top-0 left-0 right-0 z-50">
-//
-//         </div>
-//       )}
 //       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 //         <div className="flex items-center justify-between h-16">
 //           <div className="hidden md:block">
