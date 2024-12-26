@@ -7,8 +7,8 @@ type LoadingComponentProps = {};
 
 const Loading = ({}: LoadingComponentProps) => {
   return (
-    <div>
-      <p>Loading...Please wait</p>
+    <div className="flex flex-col items-center justify-center">
+      <p className="text-slate-50">Loading...Please wait</p>
       <ProgressBar
         visible={true}
         height="80"
