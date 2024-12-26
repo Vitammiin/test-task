@@ -6,6 +6,7 @@ import { env } from './utils/env.js';
 import { initMongoConnection } from './db/initMongoConnection.js';
 import { Readable } from 'stream';
 import authRoutes from './routes/auth.js';
+import { errorHandler } from './middlewares/errorHandler.js';
 
 const fastify = Fastify({ logger: true });
 
@@ -96,6 +97,8 @@ fastify.get('/stocks', async (request, reply) => {
   // Логика получения данных о акциях с использованием выбранного API
   // (Alpha Vantage, Polygon.io, Finnhub или Yahoo Finance)
 });
+
+fastify.setErrorHandler(errorHandler);
 
 const PORT = Number(env('PORT', '3001'));
 

@@ -5,6 +5,7 @@ import { Button, Input, Link, Tooltip } from '@nextui-org/react';
 import { AnimatePresence, domAnimation, LazyMotion, m } from 'framer-motion';
 import { Icon } from '@iconify/react';
 import { registerUser } from '@/api/apiRegistration';
+import dotenv from 'dotenv';
 
 const RegistrationForm = () => {
   const [isPasswordVisible, setIsPasswordVisible] = React.useState(false);
@@ -103,6 +104,8 @@ const RegistrationForm = () => {
       // Добавьте здесь обработку ошибки
     }
   };
+
+  const backendUrl = process.env.APP_BACKEND_URL;
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

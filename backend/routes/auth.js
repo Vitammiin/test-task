@@ -14,6 +14,10 @@ const authRoutes = async function (fastify) {
     },
     handler: registerUserController,
   });
+
+  fastify.get('/register', (request, reply) => {
+    reply.send({ message: 'Registration form' });
+  });
 };
 
 export default authRoutes;
