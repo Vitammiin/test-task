@@ -1,48 +1,48 @@
 import WebSocket from 'ws';
-import { processAudioForOpenAI } from './audioDecoder.js';
+import { prepareAudioForAI } from './audioDecoder.js';
 import { env } from '../utils/env.js';
 
-const OpenAiToken = env('MONGODB_URL') || '';
+const AIApiToken = env('OPENAI_API_KEY') || '';
 
-export class OpenAIService {
+export class AIAssistantService {
   constructor() {
-    this.ws = null;
-    this.clientWs = null;
-    this.sessionTimeout = null;
+    this.connection = null;
+    this.userConnection = null;
+    this.sessionTimer = null;
 
-    this.initializeWebSocket = this.initializeWebSocket.bind(this);
-    this.handleMessage = this.handleMessage.bind(this);
-    this.handleError = this.handleError.bind(this);
-    this.handleClose = this.handleClose.bind(this);
+    this.setupConnection = this.setupConnection.bind(this);
+    this.onMessage = this.onMessage.bind(this);
+    this.onError = this.onError.bind(this);
+    this.onDisconnect = this.onDisconnect.bind(this);
   }
 
-  initializeWebSocket(clientWs) {
-    this.clientWs = clientWs;
+  setupConnection(userWs) {
+    this.userConnection = userWs;
 
-    const url =
-      'wss://api.openai.com/v1/realtime?model=gpt-4o-realtime-preview-2024-10-01';
-    this.ws = new WebSocket(url, {
+    const endpoint =
+      'wss://api.openai.com/v1/realtime?model=gpt-4o-realtime-preview-2024-12-17';
+    this.connection = new WebSocket(endpoint, {
       headers: {
-        Authorization: 'Bearer ' + OpenAiToken,
+        Authorization: `Bearer ${AIApiToken}`,
         'OpenAI-Beta': 'realtime=v1',
       },
     });
 
-    this.ws.on('open', this.handleOpen.bind(this));
-    this.ws.on('message', this.handleMessage);
-    this.ws.on('error', this.handleError);
-    this.ws.on('close', this.handleClose);
+    this.connection.on('open', () => this.onConnect());
+    this.connection.on('message', this.onMessage);
+    this.connection.on('error', this.onError);
+    this.connection.on('close', this.onDisconnect);
   }
 
-  handleOpen() {
-    console.log('Connected to OpenAI WebSocket');
-    this.sendSessionConfig();
+  onConnect() {
+    console.log('AI Assistant WebSocket connected');
+    this.configureSession();
   }
 
-  sendSessionConfig() {
-    if (!this.ws) return;
+  configureSession() {
+    if (!this.connection) return;
 
-    const sessionConfig = {
+    const config = {
       type: 'session.update',
       session: {
         turn_detection: {
@@ -61,114 +61,98 @@ export class OpenAIService {
       },
     };
 
-    console.log('Sending session config:', sessionConfig);
-    this.ws.send(JSON.stringify(sessionConfig));
+    console.log('Configuring session:', config);
+    this.connection.send(JSON.stringify(config));
   }
 
-  processAudioData(audioData) {
-    if (!this.ws) return;
+  handleAudio(audioInput) {
+    if (!this.connection) return;
 
     try {
-      const float32Data = new Float32Array(audioData.buffer);
-      const sampleRate = 48000;
+      const audioFloat32 =
+        audioInput instanceof Float32Array
+          ? audioInput
+          : new Float32Array(audioInput);
 
-      const base64Audio = processAudioForOpenAI(float32Data, sampleRate);
+      const sampleFreq = 48000;
+      const encodedAudio = prepareAudioForAI(audioFloat32, sampleFreq);
 
-      const message = {
+      const payload = {
         type: 'input_audio_buffer.append',
-        audio: base64Audio,
+        audio: encodedAudio,
       };
 
-      console.log('Sending audio data:', {
-        originalSize: audioData.length,
-        processedSize: base64Audio.length,
-        sampleRate: '24kHz',
+      console.log('Transmitting audio:', {
+        rawSize: audioInput.length,
+        encodedSize: encodedAudio.length,
+        frequency: '24kHz',
         format: 'mono PCM16',
       });
 
-      this.ws.send(JSON.stringify(message));
-    } catch (error) {
-      console.error('Error processing audio data:', error);
-      if (this.clientWs) {
-        this.clientWs.send(
-          JSON.stringify({
-            type: 'error',
-            error: {
-              message: 'Error processing audio data',
-            },
-          }),
-        );
-      }
-    }
-  }
-
-  handleMessage(message) {
-    try {
-      const data = JSON.parse(message.toString());
-      console.log('Received message:', data);
-
-      switch (data.type) {
-        case 'session.created':
-          console.log('Session created successfully');
-          break;
-
-        case 'error':
-          console.error('OpenAI error:', data.error);
-          if (this.clientWs) {
-            this.clientWs.send(
-              JSON.stringify({
-                type: 'error',
-                error: data.error,
-              }),
-            );
-          }
-          break;
-
-        case 'response.audio.delta':
-          console.log('Received response.audio.delta:', data);
-          break;
-
-        case 'response.text.delta':
-          if (this.clientWs && data.delta) {
-            this.clientWs.send(JSON.stringify(data));
-          }
-          break;
-      }
-    } catch (error) {
-      console.error('Error processing message:', error);
-    }
-  }
-
-  handleError(error) {
-    console.error('OpenAI WebSocket error:', error);
-    if (this.clientWs) {
-      this.clientWs.send(
+      this.connection.send(JSON.stringify(payload));
+    } catch (err) {
+      console.error('Audio processing failed:', err);
+      this.userConnection?.send(
         JSON.stringify({
           type: 'error',
-          error: {
-            message: 'OpenAI connection error',
-          },
+          error: { message: 'Audio processing failed' },
         }),
       );
     }
   }
 
-  handleClose() {
-    console.log('OpenAI WebSocket connection closed');
-    if (this.sessionTimeout) {
-      clearTimeout(this.sessionTimeout);
+  onMessage(msg) {
+    try {
+      const content = JSON.parse(msg.toString());
+      console.log('Incoming message:', content);
+
+      switch (content.type) {
+        case 'session.created':
+          console.log('Session initialized');
+          break;
+        case 'error':
+          console.error('AI Assistant error:', content.error);
+          this.userConnection?.send(
+            JSON.stringify({
+              type: 'error',
+              error: content.error,
+            }),
+          );
+          break;
+        case 'response.audio.delta':
+          console.log('Audio response delta:', content);
+          break;
+        case 'response.text.delta':
+          content.delta && this.userConnection?.send(JSON.stringify(content));
+          break;
+      }
+    } catch (err) {
+      console.error('Message processing failed:', err);
     }
-    this.ws = null;
   }
 
-  close() {
-    if (this.sessionTimeout) {
-      clearTimeout(this.sessionTimeout);
+  onError(err) {
+    console.error('AI Assistant WebSocket error:', err);
+    this.userConnection?.send(
+      JSON.stringify({
+        type: 'error',
+        error: { message: 'AI Assistant connection error' },
+      }),
+    );
+  }
+
+  onDisconnect() {
+    console.log('AI Assistant WebSocket disconnected');
+    this.sessionTimer && clearTimeout(this.sessionTimer);
+    this.connection = null;
+  }
+
+  terminate() {
+    this.sessionTimer && clearTimeout(this.sessionTimer);
+    if (this.connection) {
+      this.connection.close();
+      this.connection = null;
     }
-    if (this.ws) {
-      this.ws.close();
-      this.ws = null;
-    }
-    this.clientWs = null;
+    this.userConnection = null;
   }
 }

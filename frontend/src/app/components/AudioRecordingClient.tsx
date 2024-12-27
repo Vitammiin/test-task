@@ -18,6 +18,16 @@ const AudioRecording: React.FC = () => {
   const animationFrameRef = useRef<number>();
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
+  const animate = () => {
+    if (!analyserRef.current) return;
+
+    const bufferLength = analyserRef.current.frequencyBinCount;
+    const dataArray = new Uint8Array(bufferLength);
+
+    drawVisualizer(dataArray, bufferLength);
+    animationFrameRef.current = requestAnimationFrame(animate);
+  };
+
   useEffect(() => {
     return () => {
       stopRecording();
@@ -32,7 +42,7 @@ const AudioRecording: React.FC = () => {
 
   const drawVisualizer = (dataArray: Uint8Array, bufferLength: number) => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    if (!canvas || !analyserRef.current) return;
 
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
@@ -40,7 +50,7 @@ const AudioRecording: React.FC = () => {
     const WIDTH = canvas.width;
     const HEIGHT = canvas.height;
 
-    analyserRef.current?.getByteFrequencyData(dataArray);
+    analyserRef.current.getByteFrequencyData(dataArray);
 
     ctx.fillStyle = '#f5f5f5';
     ctx.fillRect(0, 0, WIDTH, HEIGHT);
@@ -107,7 +117,7 @@ const AudioRecording: React.FC = () => {
 
       source.connect(analyserRef.current);
 
-      drawVisualizer(dataArray, bufferLength);
+      animate();
       setIsActive(true);
     } catch (error) {
       console.error('Error accessing microphone:', error);
@@ -154,9 +164,9 @@ const AudioRecording: React.FC = () => {
   };
 
   return (
-    <div className="text-center">
-      <div className="mb-2 text-lg font-bold">
-        {isActive ? 'End conversation' : 'Start conversation'}
+    <div className=" mt-36 p-5 bg-audio-background text-center">
+      <div className="mb-2 text-lg font-semibold text-white">
+        {isActive ? 'End conversation' : 'Start a conversation with assistants'}
       </div>
 
       <div
@@ -174,8 +184,8 @@ const AudioRecording: React.FC = () => {
       <div className="mt-4">
         <canvas
           ref={canvasRef}
-          width={500}
-          height={100}
+          width={550}
+          height={150}
           className="bg-gray-100 rounded-lg"
         />
       </div>

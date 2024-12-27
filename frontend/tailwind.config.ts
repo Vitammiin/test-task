@@ -7,6 +7,7 @@ module.exports = {
         'custom-gray': '#18181B',
         'custom-light-gray': '#ECEDEE',
         'input-dark-gray': '#27272A',
+        'audio-background': '#171717',
       },
       fontFamily: {
         sans: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],

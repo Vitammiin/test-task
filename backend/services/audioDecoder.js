@@ -1,59 +1,51 @@
-export function resampleAudio(audioData, fromSampleRate, toSampleRate) {
-  if (fromSampleRate === toSampleRate) {
-    return audioData;
+export const adjustSamplingRate = (audio, srcRate, destRate) => {
+  if (srcRate === destRate) return audio;
+
+  const scale = srcRate / destRate;
+  const newSize = Math.round(audio.length / scale);
+  const output = new Float32Array(newSize);
+
+  for (let n = 0; n < newSize; n++) {
+    const pos = n * scale;
+    const idx = Math.floor(pos);
+    const frac = pos - idx;
+
+    output[n] =
+      idx + 1 < audio.length
+        ? audio[idx] * (1 - frac) + audio[idx + 1] * frac
+        : audio[idx];
   }
 
-  const ratio = fromSampleRate / toSampleRate;
-  const newLength = Math.round(audioData.length / ratio);
-  const result = new Float32Array(newLength);
+  return output;
+};
 
-  for (let i = 0; i < newLength; i++) {
-    const position = i * ratio;
-    const index = Math.floor(position);
-    const fraction = position - index;
+export const convertToInt16 = (floatData, originalRate = 48000) => {
+  const adjusted = adjustSamplingRate(floatData, originalRate, 24000);
 
-    if (index + 1 < audioData.length) {
-      result[i] =
-        audioData[index] * (1 - fraction) + audioData[index + 1] * fraction;
-    } else {
-      result[i] = audioData[index];
-    }
+  return new Int16Array(
+    adjusted.map((sample) => {
+      const clamped = Math.max(-1, Math.min(1, sample));
+      return clamped < 0 ? clamped * 0x8000 : clamped * 0x7fff;
+    }),
+  );
+};
+
+export const toMonoChannel = (audioChannels) => {
+  if (audioChannels.length === 1) return audioChannels[0];
+
+  const monoTrack = new Float32Array(audioChannels[0].length);
+  for (let i = 0; i < monoTrack.length; i++) {
+    monoTrack[i] =
+      audioChannels.reduce((sum, channel) => sum + channel[i], 0) /
+      audioChannels.length;
   }
+  return monoTrack;
+};
 
-  return result;
-}
-
-export function floatTo16BitPCM(float32Array, sampleRate = 48000) {
-  const resampledData = resampleAudio(float32Array, sampleRate, 24000);
-
-  const int16Array = new Int16Array(resampledData.length);
-  for (let i = 0; i < resampledData.length; i++) {
-    const s = Math.max(-1, Math.min(1, resampledData[i]));
-    int16Array[i] = s < 0 ? s * 0x8000 : s * 0x7fff;
-  }
-  return int16Array;
-}
-
-export function convertToMono(audioData) {
-  if (audioData.length === 1) return audioData[0];
-
-  const monoData = new Float32Array(audioData[0].length);
-  for (let i = 0; i < monoData.length; i++) {
-    let sum = 0;
-    for (let channel = 0; channel < audioData.length; channel++) {
-      sum += audioData[channel][i];
-    }
-    monoData[i] = sum / audioData.length;
-  }
-  return monoData;
-}
-
-export function processAudioForOpenAI(audioData, sampleRate) {
-  const monoData = Array.isArray(audioData)
-    ? convertToMono(audioData)
-    : audioData;
-
-  const pcm16Data = floatTo16BitPCM(monoData, sampleRate);
-
-  return Buffer.from(pcm16Data.buffer).toString('base64');
-}
+export const prepareAudioForAI = (audioInput, sampleFreq) => {
+  const singleChannel = Array.isArray(audioInput)
+    ? toMonoChannel(audioInput)
+    : audioInput;
+  const processedAudio = convertToInt16(singleChannel, sampleFreq);
+  return Buffer.from(processedAudio.buffer).toString('base64');
+};
