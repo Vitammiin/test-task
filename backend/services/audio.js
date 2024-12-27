@@ -242,7 +242,7 @@ export class AIAssistantService {
           : new Float32Array(audioInput);
 
       const sampleFreq = 48000;
-      const minSamples = Math.ceil(sampleFreq * 0.1);
+      const minSamples = Math.ceil(sampleFreq * 0.01);
 
       if (audioFloat32.length < minSamples) {
         console.log('Audio buffer too small, skipping');

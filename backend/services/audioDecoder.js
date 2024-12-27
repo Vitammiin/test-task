@@ -48,7 +48,7 @@ export const prepareAudioForAI = (audioInput, sampleFreq) => {
     : audioInput;
   const processedAudio = convertToInt16(singleChannel, sampleFreq);
 
-  const minSamples = Math.ceil(24000 * 0.1);
+  const minSamples = Math.ceil(24000 * 0.01);
   if (processedAudio.length < minSamples) {
     const paddedAudio = new Int16Array(minSamples);
     paddedAudio.set(processedAudio);

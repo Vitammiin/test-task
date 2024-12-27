@@ -4,10 +4,10 @@ import fastifyWebsocket from '@fastify/websocket';
 import OpenAI from 'openai';
 import { env } from './utils/env.js';
 import { initMongoConnection } from './db/initMongoConnection.js';
-import { Readable } from 'stream';
 import authRoutes from './routes/auth.js';
 import { errorHandler } from './middlewares/errorHandler.js';
 import audioRoutes from './routes/audio.js';
+// import stockRoutes from './routes/stock.js';
 
 const fastify = Fastify({ logger: true });
 
@@ -28,10 +28,7 @@ fastify.register(audioRoutes);
 
 fastify.register(authRoutes);
 
-fastify.get('/stocks', async (request, reply) => {
-  // Логика получения данных о акциях с использованием выбранного API
-  // (Alpha Vantage, Polygon.io, Finnhub или Yahoo Finance)
-});
+// fastify.register(stockRoutes);
 
 fastify.setErrorHandler(errorHandler);
 
