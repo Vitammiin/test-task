@@ -7,7 +7,11 @@ const NavItem = ({ href, label, afterColor, textColor, isLast }) => (
         ? "after:content-[''] after:h-[34px] after:w-[1.5px] after:absolute after:right-0 after:top-1/2 after:translate-y-[-50%] after:bg-[var(--after-color)]"
         : ''
     }`}
-    style={afterColor ? { '--after-color': afterColor } : undefined}
+    style={
+      afterColor
+        ? ({ '--after-color': afterColor } as React.CSSProperties)
+        : undefined
+    }
   >
     <Link
       href={href}

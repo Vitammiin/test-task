@@ -64,7 +64,6 @@ const StockPage = () => {
 
   return (
     <div>
-      <h1>Stock Market Data</h1>
       <div className="filters">
         <Dropdown>
           <Button>{selectedCountry}</Button>
@@ -78,13 +77,13 @@ const StockPage = () => {
           </DropdownMenu>
         </Dropdown>
         <Input
-          className="rounded-lg border border-gray-600 bg-gray-800 px-4 py-3 text-white placeholder-gray-400 !focus:ring !focus:ring-blue-500 !focus:outline-none"
+          className="mb-[27px] rounded-lg border border-gray-600 bg pl-4.5 pr-4.5 py-1.5 text-white placeholder-gray-400 !focus:ring !focus:ring-blue-500 !focus:outline-none"
           placeholder="Enter your country"
           value={symbolFilter}
           onChange={(e) => setSymbolFilter(e.target.value)}
         />
         <Input
-          className="rounded-lg border border-gray-600 bg-gray-800 px-4 py-3 text-white placeholder-gray-400 !focus:ring !focus:ring-blue-500 !focus:outline-none"
+          className="rounded-lg border border-gray-600 bg-gray-800 pl-4.5 pr-4.5 py-1.5 text-white placeholder-gray-400 !focus:ring !focus:ring-blue-500 !focus:outline-none"
           placeholder="Enter symbol or name"
           value={symbolFilter}
           onChange={(e) => setSymbolFilter(e.target.value)}
