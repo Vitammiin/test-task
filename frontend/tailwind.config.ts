@@ -3,6 +3,11 @@ module.exports = {
   content: ['./src/**/*.{js,ts,jsx,tsx,mdx}'],
   theme: {
     extend: {
+      colors: {
+        'custom-gray': '#18181B',
+        'custom-light-gray': '#ECEDEE',
+        'input-dark-gray': '#27272A',
+      },
       fontFamily: {
         sans: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],
       },

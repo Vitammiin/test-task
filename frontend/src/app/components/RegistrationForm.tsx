@@ -30,7 +30,7 @@ const RegistrationForm = () => {
     (props: React.PropsWithChildren<{}>) => (
       <m.h1
         animate={{ opacity: 1, x: 0 }}
-        className="text-2xl font-bold text-gray-800"
+        className="text-xl font-medium text-custom-light-gray"
         exit={{ opacity: 0, x: -10 }}
         initial={{ opacity: 0, x: -10 }}
       >
@@ -111,11 +111,6 @@ const RegistrationForm = () => {
   };
 
   const handlePasswordSubmit = () => {
-    // const isValid = validatePassword(password);
-    // setIsPasswordValid(isValid); // Устанавливаем валидность
-    // if (isValid) {
-    //   paginate(1);
-    // }
     if (validatePassword(password)) {
       setIsPasswordValid(true);
       paginate(1);
@@ -165,181 +160,174 @@ const RegistrationForm = () => {
   };
 
   return (
-    <div className="flex h-full w-full items-center justify-center">
-      <div className="flex max-w-sm flex-col gap-5 overflow-hidden rounded-xl bg-white px-12 py-10 shadow-lg">
-        <LazyMotion features={domAnimation}>
-          <m.div className="flex min-h-[40px] items-center gap-4 mb-1">
-            <AnimatePresence initial={false} mode="popLayout">
-              {page >= 1 && (
-                <m.div
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -10 }}
-                  initial={{ opacity: 0, x: -10 }}
-                >
-                  <Tooltip content="Go back" delay={3000}>
-                    <Button
-                      isIconOnly
-                      size="sm"
-                      variant="flat"
-                      className="bg-gray-200 hover:bg-gray-300"
-                      onPress={() => paginate(-1)}
-                    >
-                      <Icon
-                        className="text-gray-600"
-                        icon="solar:alt-arrow-left-linear"
-                        width={16}
-                      />
-                    </Button>
-                  </Tooltip>
-                </m.div>
-              )}
-            </AnimatePresence>
-            <AnimatePresence custom={direction} initial={false} mode="wait">
-              <Title>{titleContent}</Title>
-            </AnimatePresence>
-          </m.div>
-          <AnimatePresence custom={direction} initial={false} mode="wait">
-            <m.form
-              key={page}
-              animate="center"
-              className="flex flex-col gap-5"
-              custom={direction}
-              exit="exit"
-              initial="enter"
-              method="post"
-              transition={{ duration: 0.2 }}
-              variants={variants}
-              onSubmit={handleSubmit}
-            >
-              {page === 0 && (
-                <Input
-                  autoFocus
-                  isRequired
-                  label="Email Address"
-                  name="email"
-                  type="email"
-                  placeholder="Enter your email"
-                  className="w-full"
-                  classNames={{
-                    input:
-                      'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 mb-3 mt-3',
-                    label: 'text-sm font-medium text-gray-700',
-                  }}
-                  validationState={isEmailValid ? 'valid' : 'invalid'}
-                  errorMessage={emailError}
-                  value={email}
-                  onValueChange={(value) => {
-                    setIsEmailValid(true);
-                    setEmail(value);
-                  }}
-                />
-              )}
-              {page === 1 && (
-                <Input
-                  autoFocus
-                  isRequired
-                  endContent={
-                    <button type="button" onClick={togglePasswordVisibility}>
-                      {isPasswordVisible ? (
-                        <Icon
-                          className="pointer-events-none text-2xl text-gray-400"
-                          icon="solar:eye-closed-linear"
-                        />
-                      ) : (
-                        <Icon
-                          className="pointer-events-none text-2xl text-gray-400"
-                          icon="solar:eye-bold"
-                        />
-                      )}
-                    </button>
-                  }
-                  label="Password"
-                  name="password"
-                  placeholder="Enter your password"
-                  type={isPasswordVisible ? 'text' : 'password'}
-                  className="w-full"
-                  classNames={{
-                    input:
-                      'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 mb-3 mt-3',
-                    label: 'text-sm font-medium text-gray-700',
-                  }}
-                  validationState={isPasswordValid ? 'valid' : 'invalid'}
-                  errorMessage={passwordError}
-                  value={password}
-                  onValueChange={(value) => {
-                    setIsPasswordValid(true);
-                    setPassword(value);
-                  }}
-                />
-              )}
-              {page === 2 && (
-                <Input
-                  autoFocus
-                  isRequired
-                  endContent={
-                    <button
-                      type="button"
-                      onClick={toggleConfirmPasswordVisibility}
-                    >
-                      {isConfirmPasswordVisible ? (
-                        <Icon
-                          className="pointer-events-none text-2xl text-gray-400"
-                          icon="solar:eye-closed-linear"
-                        />
-                      ) : (
-                        <Icon
-                          className="pointer-events-none text-2xl text-gray-400"
-                          icon="solar:eye-bold"
-                        />
-                      )}
-                    </button>
-                  }
-                  errorMessage={
-                    !isConfirmPasswordValid
-                      ? 'Passwords do not match'
-                      : undefined
-                  }
-                  label="Confirm Password"
-                  name="confirmPassword"
-                  type={isConfirmPasswordVisible ? 'text' : 'password'}
-                  placeholder="Repeat your password"
-                  className="w-full"
-                  classNames={{
-                    input:
-                      'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 mb-3 mt-3',
-                    label: 'text-sm font-medium text-gray-700',
-                  }}
-                  validationState={isConfirmPasswordValid ? 'valid' : 'invalid'}
-                  value={confirmPassword}
-                  onValueChange={(value) => {
-                    setIsConfirmPasswordValid(true);
-                    setConfirmPassword(value);
-                  }}
-                />
-              )}
-              <Button
-                fullWidth
-                color="primary"
-                type="submit"
-                className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300"
+    <div className="min-w-[384px] pt-[26px] px-8 pb-10 flex flex-col gap-3 overflow-hidden rounded-[14px] bg-custom-gray shadow-lg">
+      <LazyMotion features={domAnimation}>
+        <m.div className="flex min-h-[40px] items-start">
+          <AnimatePresence initial={false} mode="popLayout">
+            {page >= 1 && (
+              <m.div
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -10 }}
+                initial={{ opacity: 0, x: -10 }}
               >
-                {page === 0
-                  ? 'Continue with Email'
-                  : page === 1
-                    ? 'Enter Password'
-                    : 'Confirm Password'}
-              </Button>
-            </m.form>
+                <Tooltip content="Go back" delay={3000}>
+                  <Button
+                    isIconOnly
+                    size="sm"
+                    variant="flat"
+                    className="bg-gray-200 hover:bg-gray-300 mt-1.5 mr-1.5"
+                    onPress={() => paginate(-1)}
+                  >
+                    <Icon
+                      className="text-gray-800"
+                      icon="solar:alt-arrow-left-linear"
+                      width={16}
+                    />
+                  </Button>
+                </Tooltip>
+              </m.div>
+            )}
           </AnimatePresence>
-        </LazyMotion>
-        <p className="text-center text-sm text-gray-600">
-          Already have an account?&nbsp;
-          <Link href="#" className="text-blue-600 hover:underline">
-            Log In
-          </Link>
-        </p>
-        <Toaster position="top-right" reverseOrder={false} />
-      </div>
+          <AnimatePresence custom={direction} initial={false} mode="wait">
+            <Title>{titleContent}</Title>
+          </AnimatePresence>
+        </m.div>
+        <AnimatePresence custom={direction} initial={false} mode="wait">
+          <m.form
+            key={page}
+            animate="center"
+            className="flex flex-col gap-5"
+            custom={direction}
+            exit="exit"
+            initial="enter"
+            method="post"
+            transition={{ duration: 0.2 }}
+            variants={variants}
+            onSubmit={handleSubmit}
+          >
+            {page === 0 && (
+              <Input
+                autoFocus
+                isRequired
+                name="email"
+                type="email"
+                placeholder="mail &#42;"
+                className="w-full"
+                classNames={{
+                  input:
+                    'bg-input-dark-gray border border-gray-500 hover:border-blue-500 focus-visible:border-blue-600 text-white text-sm rounded-xl focus:ring-blue-500 block w-[335px] -ml-2.5 my-2 px-3 py-4 transition-colors duration-200',
+                  errorMessage: 'text-red-500',
+                }}
+                validationState={isEmailValid ? 'valid' : 'invalid'}
+                errorMessage={emailError}
+                value={email}
+                onValueChange={(value) => {
+                  setIsEmailValid(true);
+                  setEmail(value);
+                }}
+              />
+            )}
+            {page === 1 && (
+              <Input
+                autoFocus
+                isRequired
+                endContent={
+                  <button type="button" onClick={togglePasswordVisibility}>
+                    {isPasswordVisible ? (
+                      <Icon
+                        className="pointer-events-none text-2xl text-gray-400"
+                        icon="solar:eye-closed-linear"
+                      />
+                    ) : (
+                      <Icon
+                        className="pointer-events-none text-2xl text-gray-400"
+                        icon="solar:eye-bold"
+                      />
+                    )}
+                  </button>
+                }
+                name="password"
+                placeholder="password &#42;"
+                type={isPasswordVisible ? 'text' : 'password'}
+                className="w-full"
+                classNames={{
+                  input:
+                    'bg-input-dark-gray border border-gray-500 hover:border-blue-500 focus-visible:border-blue-600 text-white text-sm rounded-xl focus:ring-blue-500 block w-[335px] -ml-2.5 my-2 px-3 py-4 transition-colors duration-200',
+                  errorMessage: 'text-red-500',
+                }}
+                validationState={isPasswordValid ? 'valid' : 'invalid'}
+                errorMessage={passwordError}
+                value={password}
+                onValueChange={(value) => {
+                  setIsPasswordValid(true);
+                  setPassword(value);
+                }}
+              />
+            )}
+            {page === 2 && (
+              <Input
+                autoFocus
+                isRequired
+                endContent={
+                  <button
+                    type="button"
+                    onClick={toggleConfirmPasswordVisibility}
+                  >
+                    {isConfirmPasswordVisible ? (
+                      <Icon
+                        className="pointer-events-none text-2xl text-gray-400"
+                        icon="solar:eye-closed-linear"
+                      />
+                    ) : (
+                      <Icon
+                        className="pointer-events-none text-2xl text-gray-400"
+                        icon="solar:eye-bold"
+                      />
+                    )}
+                  </button>
+                }
+                errorMessage={
+                  !isConfirmPasswordValid ? 'Passwords do not match' : undefined
+                }
+                name="confirmPassword"
+                type={isConfirmPasswordVisible ? 'text' : 'password'}
+                placeholder="repeat your password &#42;"
+                className="w-full"
+                classNames={{
+                  input:
+                    'bg-input-dark-gray border border-gray-500 hover:border-blue-500 focus-visible:border-blue-600 text-white text-sm rounded-xl focus:ring-blue-500 block w-[335px] -ml-2.5 my-2 px-3 py-4 transition-colors duration-200',
+                  errorMessage: 'text-red-500',
+                }}
+                validationState={isConfirmPasswordValid ? 'valid' : 'invalid'}
+                value={confirmPassword}
+                onValueChange={(value) => {
+                  setIsConfirmPasswordValid(true);
+                  setConfirmPassword(value);
+                }}
+              />
+            )}
+            <Button
+              fullWidth
+              color="primary"
+              type="submit"
+              className="bg-blue-600 hover:bg-blue-700 text-white font-normal py-2 px-4 rounded-xl transition duration-300"
+            >
+              {page === 0
+                ? 'Continue with Email'
+                : page === 1
+                  ? 'Enter Password'
+                  : 'Confirm Password'}
+            </Button>
+          </m.form>
+        </AnimatePresence>
+      </LazyMotion>
+      <p className="text-center text-sm text-custom-light-gray">
+        Already have an account?&nbsp;
+        <Link href="#" className="text-blue-600 hover:underline">
+          Log In
+        </Link>
+      </p>
+      <Toaster position="top-right" reverseOrder={false} />
     </div>
   );
 };
