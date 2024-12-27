@@ -15,7 +15,7 @@ const AudioRecording: React.FC = () => {
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
   const analyserRef = useRef<AnalyserNode | null>(null);
-  const animationFrameRef = useRef<number>();
+  const animationFrameRef = useRef<number | null>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const animate = () => {
@@ -52,18 +52,18 @@ const AudioRecording: React.FC = () => {
 
     analyserRef.current.getByteFrequencyData(dataArray);
 
-    ctx.fillStyle = '#f5f5f5';
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
     ctx.fillRect(0, 0, WIDTH, HEIGHT);
 
-    const barWidth = (WIDTH / bufferLength) * 2.5;
+    const barWidth = (WIDTH / bufferLength) * 2.3;
     let barHeight;
     let x = 0;
 
     for (let i = 0; i < bufferLength; i++) {
       barHeight = dataArray[i] / 2;
       const gradient = ctx.createLinearGradient(0, 0, 0, HEIGHT);
-      gradient.addColorStop(0, '#4e9dff');
-      gradient.addColorStop(1, '#2979ff');
+      gradient.addColorStop(0, '#8A2BE2');
+      gradient.addColorStop(1, '#4B0082');
 
       ctx.fillStyle = gradient;
       ctx.fillRect(x, HEIGHT - barHeight, barWidth, barHeight);
@@ -181,12 +181,12 @@ const AudioRecording: React.FC = () => {
         />
       </div>
 
-      <div className="mt-4">
+      <div className="mt-3">
         <canvas
           ref={canvasRef}
           width={550}
           height={150}
-          className="bg-gray-100 rounded-lg"
+          className="rounded-lg"
         />
       </div>
     </div>

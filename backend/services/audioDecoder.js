@@ -47,5 +47,13 @@ export const prepareAudioForAI = (audioInput, sampleFreq) => {
     ? toMonoChannel(audioInput)
     : audioInput;
   const processedAudio = convertToInt16(singleChannel, sampleFreq);
+
+  const minSamples = Math.ceil(24000 * 0.1);
+  if (processedAudio.length < minSamples) {
+    const paddedAudio = new Int16Array(minSamples);
+    paddedAudio.set(processedAudio);
+    return Buffer.from(paddedAudio.buffer).toString('base64');
+  }
+
   return Buffer.from(processedAudio.buffer).toString('base64');
 };
