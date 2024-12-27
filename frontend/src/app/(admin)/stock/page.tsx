@@ -1,3 +1,4 @@
+import StockPage from '@/app/components/StockPage';
 import React from 'react';
 
 type Props = {};
@@ -5,7 +6,7 @@ type Props = {};
 const Page = (props: Props) => {
   return (
     <div>
-      <h1>Stock page</h1>
+      <StockPage />
     </div>
   );
 };
