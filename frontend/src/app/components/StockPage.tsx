@@ -47,38 +47,42 @@ function StocksPage() {
   }, [country, symbol]);
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="flex flex-col text-center justify-center"
-    >
-      <Input
-        type="text"
-        value={country}
-        onChange={handleCountryChange}
-        style={{
-          ...inputStyle,
-          marginTop: '150px',
-        }}
-        placeholder="Enter your country"
-        classNames={{
-          input: 'placeholder:text-white',
-        }}
-      />
-      <Input
-        type="text"
-        value={symbol}
-        onChange={handleSymbolChange}
-        style={{
-          ...inputStyle,
-          marginTop: '27px',
-        }}
-        placeholder="Enter symbol or name"
-        classNames={{
-          input: 'placeholder:text-white',
-        }}
-      />
-      <StocksTable country={country} symbol={symbol} />
-    </form>
+    <div className="pt-20">
+      <form
+        onSubmit={handleSubmit}
+        className="flex flex-col text-center justify-center"
+      >
+        <Input
+          type="text"
+          value={country}
+          onChange={handleCountryChange}
+          style={{
+            ...inputStyle,
+            marginTop: '80px',
+          }}
+          placeholder="Enter your country"
+          classNames={{
+            input: 'placeholder:text-white',
+          }}
+        />
+
+        <Input
+          type="text"
+          value={symbol}
+          onChange={handleSymbolChange}
+          style={{
+            ...inputStyle,
+            marginTop: '27px',
+          }}
+          placeholder="Enter symbol or name"
+          classNames={{
+            input: 'placeholder:text-white',
+          }}
+        />
+
+        <StocksTable country={country} symbol={symbol} />
+      </form>
+    </div>
   );
 }
 
