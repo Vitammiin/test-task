@@ -1,88 +1,60 @@
 'use client';
 
-import {
-  Table,
-  TableHeader,
-  TableBody,
-  TableColumn,
-  TableRow,
-  TableCell,
-  Input,
-  Button,
-  Pagination,
-} from '@nextui-org/react';
-import { useState } from 'react';
+import React, { useState } from 'react';
+import { Input } from '@nextui-org/react';
+import Stocks from './Table';
 
-type Stock = {
-  name: string;
-  symbol: string;
-  locale: string;
-};
+function Page() {
+  const [country, setCountry] = useState<string>('');
+  const [symbol, setSymbol] = useState<string>('');
 
-type StockDetails = {
-  price: number;
-  priceChangeDay: string;
-  priceChangeMonth: string;
-};
+  const inputStyle = {
+    width: '282px',
+    height: '32px',
+    paddingLeft: '18px',
+    paddingRight: '18px',
+    borderRadius: '12px',
+    fontSize: '14px',
+    fontFamily: 'Inter, sans-serif',
+    fontWeight: '400',
+    lineHeight: '20px',
+    background: 'none',
+    color: 'white',
+    boxShadow: '0px 1px 2px 0px rgba(0, 0, 0, 0.05)',
+    border: '2px solid var(--colors-base-default-400, rgba(161, 161, 170, 1))',
+  };
 
-export default function StocksPage() {
   return (
-    <div className="text-white p-6">
-      <div className="flex flex-col items-center mb-6 justify-center">
-        <Input
-          className="mb-[27px] rounded-lg border border-gray-600 bg pl-4.5 pr-4.5 py-1.5 text-white placeholder-gray-400 !focus:ring !focus:ring-blue-500 !focus:outline-none"
-          placeholder="Enter your country"
-          // value={symbol}
-          // onChange={(e) => {
-          //   const newValue = e.target.value;
-          //   setSymbol(newValue);
-          //   handleSearch(newValue);
-          // }}
-        />
-        <Input
-          className="rounded-lg border border-gray-600 bg-gray-800 pl-4.5 pr-4.5 py-1.5 text-white placeholder-gray-400 !focus:ring !focus:ring-blue-500 !focus:outline-none"
-          placeholder="Enter symbol or name"
-          // value={symbol}
-          // onChange={(e) => {
-          //   const newValue = e.target.value;
-          //   setSymbol(newValue);
-          //   handleSearch(newValue);
-          // }}
-        />
-      </div>
-
-      {/* {error && (
-        <div className="mb-4 p-3 text-red-500 bg-red-100 border border-red-400 rounded">
-          {error}
-        </div>
-      )} */}
-
-      {/* <Table
-        aria-label="Stocks Table"
-        className="mt-5 text-white h-[70vh]"
-        style={{ borderSpacing: '3.5rem 0.3rem', borderCollapse: 'separate' }}
-      >
-        <TableHeader>
-          <TableColumn>#</TableColumn>
-          <TableColumn>Symbol</TableColumn>
-          <TableColumn>Name</TableColumn>
-          <TableColumn>Capitalization</TableColumn>
-          <TableColumn>Price</TableColumn>
-          <TableColumn>Price Change per Day</TableColumn>
-          <TableColumn>Price Change per Month</TableColumn>
-          <TableColumn>Action</TableColumn>
-        </TableHeader>
-        <TableBody>
-          
-        </TableBody>
-      </Table> */}
-
-      {/* <Pagination
-        total={1}
-        initialPage={1}
-        onChange={(page) => setCurrentPage(page)}
-        className="mt-8 flex justify-center"
-      /> */}
+    <div className="flex flex-col text-center justify-center">
+      <Input
+        type="text"
+        value={country}
+        onChange={(e) => setCountry(e.target.value)}
+        style={{
+          ...inputStyle,
+          marginTop: '150px',
+        }}
+        placeholder="Enter your country"
+        classNames={{
+          input: 'placeholder:text-white',
+        }}
+      />
+      <Input
+        type="text"
+        value={symbol}
+        onChange={(e) => setSymbol(e.target.value)}
+        style={{
+          ...inputStyle,
+          marginTop: '27px',
+        }}
+        placeholder="Enter symbol or name"
+        classNames={{
+          input: 'placeholder:text-white',
+        }}
+      />
+      <Stocks country={country} symbol={symbol} />
     </div>
   );
 }
+
+export default Page;

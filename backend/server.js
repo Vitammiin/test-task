@@ -7,7 +7,7 @@ import { initMongoConnection } from './db/initMongoConnection.js';
 import authRoutes from './routes/auth.js';
 import { errorHandler } from './middlewares/errorHandler.js';
 import audioRoutes from './routes/audio.js';
-// import stockRoutes from './routes/stock.js';
+import stockRoutes from './routes/stock.js';
 
 const fastify = Fastify({ logger: true });
 
@@ -28,7 +28,7 @@ fastify.register(audioRoutes);
 
 fastify.register(authRoutes);
 
-// fastify.register(stockRoutes);
+fastify.register(stockRoutes);
 
 fastify.setErrorHandler(errorHandler);
 

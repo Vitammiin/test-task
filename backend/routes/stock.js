@@ -1,6 +1,8 @@
-// const stockRoutes = async (fastify) => {
-//   fastify.get('/stock', getStockData);
-//   fastify.get('/stockPrice', getStockPriceData);
-// };
+import { getStock, getAllStock } from '../controllers/stock.js';
 
-// export default stockRoutes;
+const stockRoutes = (fastify) => {
+  fastify.get('/stock', getStock);
+  fastify.get('/stocks', getAllStock);
+};
+
+export default stockRoutes;
