@@ -12,34 +12,24 @@ import { useEffect, useState } from 'react';
 import { getAllStock, getStock } from '@/api/apiStock';
 import { StockProps, StockData } from '../(admin)/stock/stockTypes';
 
-export default function Stocks({ country, symbol }: StockProps) {
-  const [stocks, setStocks] = useState<StockData[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+const StocksTable = ({ country, symbol }: StockProps) => {
   const [allStock, setAllStock] = useState<StockData[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const itemsPerPage = 4;
+  const [loading, setLoading] = useState<boolean>(true);
+  const [stocks, setStocks] = useState<StockData[]>([]);
 
   const [symbols] = useState([
     'AAPL',
-    'ADBE',
-    'AMD',
     'AMZN',
     'BRK-B',
     'CSCO',
-    'DIS',
     'FB',
     'GOOGL',
-    'GS',
-    'HD',
-    'INTC',
-    'JPM',
-    'MA',
     'META',
     'MSFT',
     'NFLX',
     'NVDA',
-    'PG',
-    'PYPL',
     'SBUX',
     'TSLA',
     'UNH',
@@ -49,20 +39,24 @@ export default function Stocks({ country, symbol }: StockProps) {
 
   useEffect(() => {
     const getData = async () => {
+      setLoading(true);
       setStocks([]);
-      const data = await getStock(country, symbol);
-      if (data) {
-        setStocks([data]);
+      if (country && symbol) {
+        const data = await getStock(country, symbol);
+        if (data) {
+          setStocks([data]);
+        }
+      } else if (!symbol) {
+        const data = await getAllStock(country || 'US', symbols);
+        if (data) {
+          setAllStock(data);
+        }
       }
       setLoading(false);
     };
 
-    if (country && symbol) {
-      getData();
-    } else if (!country || !symbol) {
-      setStocks([]);
-    }
-  }, [country, symbol]);
+    getData();
+  }, [country, symbol, symbols]);
 
   useEffect(() => {
     const getData = async () => {
@@ -128,7 +122,9 @@ export default function Stocks({ country, symbol }: StockProps) {
                         : 'rgba(244, 28, 28, 1)',
                   }}
                 >
-                  {stock.quote.d >= 0 ? '+' + stock.quote.d : stock.quote.d}
+                  {stock.quote.d >= 0
+                    ? '+' + stock.quote.d + '%'
+                    : stock.quote.d + '%'}
                 </TableCell>
                 <TableCell
                   style={{
@@ -138,14 +134,16 @@ export default function Stocks({ country, symbol }: StockProps) {
                         : 'rgba(244, 28, 28, 1)',
                   }}
                 >
-                  {stock.quote.dp >= 0 ? '+' + stock.quote.dp : stock.quote.dp}
+                  {stock.quote.dp >= 0
+                    ? '+' + stock.quote.dp + '%'
+                    : stock.quote.dp + '%'}
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       ) : (
-        <div>No stocks found.</div>
+        <div className="text-white">No stocks found.</div>
       )}
 
       {totalPages > 1 && (
@@ -185,4 +183,6 @@ export default function Stocks({ country, symbol }: StockProps) {
       )}
     </div>
   );
-}
+};
+
+export default StocksTable;

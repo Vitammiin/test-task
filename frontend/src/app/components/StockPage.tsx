@@ -1,12 +1,14 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Input } from '@nextui-org/react';
-import Stocks from './Table';
+import StocksTable from './StocksTable';
 
-function Page() {
+function StocksPage() {
   const [country, setCountry] = useState<string>('');
   const [symbol, setSymbol] = useState<string>('');
+  const [submittedCountry, setSubmittedCountry] = useState<string>('');
+  const [submittedSymbol, setSubmittedSymbol] = useState<string>('');
 
   const inputStyle = {
     width: '282px',
@@ -24,12 +26,35 @@ function Page() {
     border: '2px solid var(--colors-base-default-400, rgba(161, 161, 170, 1))',
   };
 
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setSubmittedCountry(country);
+    setSubmittedSymbol(symbol);
+  };
+
+  const handleCountryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCountry(e.target.value);
+  };
+
+  const handleSymbolChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSymbol(e.target.value);
+  };
+
+  useEffect(() => {
+    handleSubmit({
+      preventDefault: () => {},
+    } as React.FormEvent<HTMLFormElement>);
+  }, [country, symbol]);
+
   return (
-    <div className="flex flex-col text-center justify-center">
+    <form
+      onSubmit={handleSubmit}
+      className="flex flex-col text-center justify-center"
+    >
       <Input
         type="text"
         value={country}
-        onChange={(e) => setCountry(e.target.value)}
+        onChange={handleCountryChange}
         style={{
           ...inputStyle,
           marginTop: '150px',
@@ -42,7 +67,7 @@ function Page() {
       <Input
         type="text"
         value={symbol}
-        onChange={(e) => setSymbol(e.target.value)}
+        onChange={handleSymbolChange}
         style={{
           ...inputStyle,
           marginTop: '27px',
@@ -52,9 +77,9 @@ function Page() {
           input: 'placeholder:text-white',
         }}
       />
-      <Stocks country={country} symbol={symbol} />
-    </div>
+      <StocksTable country={country} symbol={symbol} />
+    </form>
   );
 }
 
-export default Page;
+export default StocksPage;

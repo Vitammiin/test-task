@@ -2,8 +2,8 @@ export interface StockSymbolInfo {
   currency: string;
   description: string;
   displaySymbol: string;
-  figi: string;
   isin: string | null;
+  figi: string;
   symbol: string;
 }
 

@@ -16,9 +16,7 @@ export const getStock = async (country: string, symbol: string) => {
 export const getAllStock = async (country: string, symbols: string[]) => {
   try {
     const response = await axios.get(
-      `http://127.0.0.1:3001/stocks?country=${country}&symbols=${symbols.join(
-        ',',
-      )}`,
+      `http://127.0.0.1:3001/stocks?country=${country}&symbols=${symbols.join(',')}`,
     );
     if (response && response.data) {
       return response.data;
