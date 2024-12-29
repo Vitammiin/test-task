@@ -77,9 +77,7 @@ const AudioRecording: React.FC = () => {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       setAudioStream(stream);
 
-      const socket = new WebSocket(
-        'wss://audio-recorder-backend-plno.onrender.com/ws',
-      );
+      const socket = new WebSocket('ws://localhost:3001/ws');
 
       socket.onopen = () => {
         console.log('WebSocket connection established');
