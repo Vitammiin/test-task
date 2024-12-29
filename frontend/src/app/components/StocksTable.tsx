@@ -17,7 +17,7 @@ const StocksTable = ({ country, symbol }: StockProps) => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const itemsPerPage = 4;
   const [loading, setLoading] = useState<boolean>(true);
-  const [stocks, setStocks] = useState<StockData[]>([]);
+  const [filteredStocks, setFilteredStocks] = useState<StockData[]>([]);
 
   const [symbols] = useState([
     'AAPL',
@@ -26,60 +26,67 @@ const StocksTable = ({ country, symbol }: StockProps) => {
     'CSCO',
     'FB',
     'GOOGL',
+    'LMND',
     'META',
     'MSFT',
     'NFLX',
     'NVDA',
+    'RGTI',
     'SBUX',
     'TSLA',
     'UNH',
     'V',
     'WMT',
+    'WULF',
   ]);
 
   useEffect(() => {
     const getData = async () => {
       setLoading(true);
-      setStocks([]);
-      if (country && symbol) {
-        const data = await getStock(country, symbol);
-        if (data) {
-          setStocks([data]);
-        }
-      } else if (!symbol) {
-        const data = await getAllStock(country || 'US', symbols);
-        if (data) {
-          setAllStock(data);
-        }
+      const data = await getAllStock('US', symbols);
+      if (data) {
+        setAllStock(data);
+        setFilteredStocks(data);
       }
       setLoading(false);
     };
 
     getData();
-  }, [country, symbol, symbols]);
+  }, [symbols]);
 
   useEffect(() => {
-    const getData = async () => {
-      const data = await getAllStock('US', symbols);
-      if (data) {
-        setAllStock(data);
+    const filterStocks = () => {
+      let filtered = allStock;
+
+      if (country) {
+        filtered = filtered.filter((stock) =>
+          stock.symbolInfo.symbol.toLowerCase().includes(country.toLowerCase()),
+        );
       }
-      setLoading(false);
+
+      if (symbol) {
+        filtered = filtered.filter((stock) =>
+          symbols.some(
+            (s) =>
+              s.toLowerCase().includes(symbol.toLowerCase()) &&
+              stock.symbolInfo.symbol.toLowerCase().includes(s.toLowerCase()),
+          ),
+        );
+      }
+
+      setFilteredStocks(filtered);
+      setCurrentPage(1);
     };
 
-    if (!symbol && !allStock.length) {
-      getData();
-    }
-  }, [country, symbols, allStock, symbol]);
+    filterStocks();
+  }, [country, symbol, allStock, symbols]);
 
-  const currentStocks = (stocks.length > 0 ? stocks : allStock).slice(
+  const currentStocks = filteredStocks.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage,
   );
 
-  const totalPages = Math.ceil(
-    (stocks.length > 0 ? stocks : allStock).length / itemsPerPage,
-  );
+  const totalPages = Math.ceil(filteredStocks.length / itemsPerPage);
 
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
