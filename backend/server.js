@@ -12,7 +12,7 @@ import stockRoutes from './routes/stock.js';
 const fastify = Fastify({ logger: true });
 
 fastify.register(fastifyCors, {
-  origin: 'http://localhost:3000',
+  origin: ['http://localhost:3000', 'https://test-task-vorcl-sand.vercel.app'],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
